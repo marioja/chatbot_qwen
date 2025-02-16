@@ -5,7 +5,14 @@ from llama_stack_client import LlamaStackClient
 
 # These environment variables should be defined before running the script
 # os.environ['LLAMA_STACK_PORT'] = "5001"
-# os.environ['INFERENCE_MODEL'] = "meta-llama/Llama-3.2-1B"
+# os.environ['INFERENCE_MODEL'] = "meta-llama/Llama-3.2-1B-Instruct"
+
+# This chat will work with the LLaMA Stack running locally on port 5001.
+# You should use the --gpus all flag when running the LLaMA Stack to enable
+# GPU support.
+# The INFERENCE_MODEL environment variable should be set to the name of the
+# model you want to use which should be an instruct model otherwise it will
+# take a long time to respond and will probably timeout.
 
 # Create the HTTP client
 def create_http_client():
