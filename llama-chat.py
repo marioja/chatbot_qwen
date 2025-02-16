@@ -2,6 +2,7 @@ import os
 import sys
 import httpx
 from llama_stack_client import LlamaStackClient
+from sty import fg
 
 # These environment variables should be defined before running the script
 # os.environ['LLAMA_STACK_PORT'] = "5001"
@@ -13,6 +14,8 @@ from llama_stack_client import LlamaStackClient
 # The INFERENCE_MODEL environment variable should be set to the name of the
 # model you want to use which should be an instruct model otherwise it will
 # take a long time to respond and will probably timeout.
+
+# See the start-llama.ps1 for an example of how to start the LLaMA Stack with
 
 # Create the HTTP client
 def create_http_client():
@@ -49,7 +52,7 @@ def main():
         llama_response = get_llama_response(client, messages)
         messages.append({"role": "assistant", "content": llama_response, "stop_reason": "end_of_turn"})
         
-        print(f"LLaMA: {llama_response}")
+        print(fg.yellow + f"LLaMA: {llama_response}" + fg.rs)
 
 if __name__ == "__main__":
     main()
