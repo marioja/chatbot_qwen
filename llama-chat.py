@@ -1,0 +1,48 @@
+import os
+import sys
+import httpx
+from llama_stack_client import LlamaStackClient
+
+# These environment variables should be defined before running the script
+# os.environ['LLAMA_STACK_PORT'] = "5001"
+# os.environ['INFERENCE_MODEL'] = "meta-llama/Llama-3.2-1B"
+
+# Create the HTTP client
+def create_http_client():
+    return LlamaStackClient(
+        base_url=f"http://localhost:{os.environ['LLAMA_STACK_PORT']}",
+        timeout=httpx.Timeout(60.0)  # Set timeout to 60 seconds
+    )
+
+# Initialize the client
+client = create_http_client()
+
+# Function to get chat completion from LlamaStack
+def get_llama_response(client, messages):
+    response = client.inference.chat_completion(
+        model_id=os.environ["INFERENCE_MODEL"],
+        messages=messages,
+    )
+    return response.completion_message.content
+
+# Main function to run the chatbot
+def main():
+    print("Welcome to the LLaMA Chatbot!")
+    print("Type 'exit' to end the conversation.")
+    
+    messages = [{"role": "system", "content": "You are a helpful assistant."}]
+    
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() == "exit":
+            print("Goodbye!")
+            break
+        
+        messages.append({"role": "user", "content": user_input})
+        llama_response = get_llama_response(client, messages)
+        messages.append({"role": "assistant", "content": llama_response, "stop_reason": "end_of_turn"})
+        
+        print(f"LLaMA: {llama_response}")
+
+if __name__ == "__main__":
+    main()
